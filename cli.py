@@ -41,11 +41,12 @@ class AirDropCli:
         parser.add_argument(
             "-u", "--url", help="'-f,--file is a URL", action="store_true"
         )
-        #parser.add_argument(
-        #    "-r",
-        #    "--receiver",
-        #    help="Peer to send file to (can be index, ID, or hostname)",
-        #)
+##        parser.add_argument(
+##            "-r",
+##            "--receiver",
+##            type=str,
+##            help="Peer to send file to (can be index, ID, or hostname)",
+##        )
         parser.add_argument(
             "-e", "--email", nargs="*", help="User's email addresses (currently unused)"
         )
@@ -105,9 +106,9 @@ class AirDropCli:
                     parser.error("File in -f,--file not found")
                 self.file = args.file
                 self.is_url = args.url
-                # if args.receiver is None:
-                #    parser.error("Need -r,--receiver when using send")
-                self.receiver = self.final
+##                if args.receiver is None:
+##                    parser.error("Need -r,--receiver when using send")
+##                self.receiver = args.receiver
                 self.send()
         except KeyboardInterrupt:
             if self.browser is not None:
@@ -120,7 +121,7 @@ class AirDropCli:
         self.browser = AirDropBrowser(self.config)
         self.browser.start(callback_add=self._found_receiver)
         try:
-            threading.Event().wait(10)
+            threading.Event().wait()
         except KeyboardInterrupt:
             pass
         finally:
@@ -168,13 +169,11 @@ class AirDropCli:
             "flags": flags,
             "discoverable": discoverable,
         }
-        key = ["id"]
         self.lock.acquire()
         self.discover.append(node_info)
+        key = ["id"]
         for index in key:
             self.uniques.append(node_info[index])
-            self.final = ' '.join(map(str, self.uniques))
-            print(self.final)
         if discoverable:
             logger.info(f"Found  index {index}  ID {identifier}  name {receiver_name}")
         else:
