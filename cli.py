@@ -31,22 +31,23 @@ logger = logging.getLogger(__name__)
 
 def main():
     AirDropCli(sys.argv[1:])
+    
 
 
 class AirDropCli:
     def __init__(self, args):
+        print(args)
         parser = argparse.ArgumentParser()
         parser.add_argument("action", choices=["receive", "find", "send"])
         parser.add_argument("-f", "--file", help="File to be sent")
         parser.add_argument(
             "-u", "--url", help="'-f,--file is a URL", action="store_true"
         )
-##        parser.add_argument(
-##            "-r",
-##            "--receiver",
-##            type=str,
-##            help="Peer to send file to (can be index, ID, or hostname)",
-##        )
+        parser.add_argument(
+            "-r",
+            "--receiver",
+            help="Peer to send file to (can be index, ID, or hostname)",
+        )
         parser.add_argument(
             "-e", "--email", nargs="*", help="User's email addresses (currently unused)"
         )
@@ -90,9 +91,8 @@ class AirDropCli:
         self.browser = None
         self.sending_started = False
         self.discover = []
-        self.uniques = []
-        self.final = []
         self.lock = threading.Lock()
+        self.uniques = []
 
         try:
             if args.action == "receive":
@@ -106,9 +106,9 @@ class AirDropCli:
                     parser.error("File in -f,--file not found")
                 self.file = args.file
                 self.is_url = args.url
-##                if args.receiver is None:
-##                    parser.error("Need -r,--receiver when using send")
-##                self.receiver = args.receiver
+                if args.receiver is None:
+                    parser.error("Need -r,--receiver when using send")
+                self.receiver = args.receiver
                 self.send()
         except KeyboardInterrupt:
             if self.browser is not None:
@@ -121,14 +121,16 @@ class AirDropCli:
         self.browser = AirDropBrowser(self.config)
         self.browser.start(callback_add=self._found_receiver)
         try:
-            threading.Event().wait()
+            threading.Event().wait(5)
         except KeyboardInterrupt:
             pass
         finally:
             self.browser.stop()
             logger.debug(f"Save discovery results to {self.config.discovery_report}")
+            print(self.discover)
             with open(self.config.discovery_report, "w") as f:
                 json.dump(self.discover, f)
+            AirDropCli(['send', '-r', '3d6b1f391ba9', '-f', 'https://google.com', '--url'])
 
     def _found_receiver(self, info):
         thread = threading.Thread(target=self._send_discover, args=(info,))
@@ -171,9 +173,13 @@ class AirDropCli:
         }
         self.lock.acquire()
         self.discover.append(node_info)
+        
         key = ["id"]
         for index in key:
-            self.uniques.append(node_info[index])
+            self.uniques.append(node_info[index])  
+        self.final = '\n'.join(map(str, self.uniques))
+        print(self.final)
+        
         if discoverable:
             logger.info(f"Found  index {index}  ID {identifier}  name {receiver_name}")
         else:
