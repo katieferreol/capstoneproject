@@ -93,6 +93,7 @@ class AirDropCli:
         self.discover = []
         self.lock = threading.Lock()
         self.uniques = []
+        self.final = []
 
         try:
             if args.action == "receive":
@@ -127,10 +128,14 @@ class AirDropCli:
         finally:
             self.browser.stop()
             logger.debug(f"Save discovery results to {self.config.discovery_report}")
-            print(self.discover)
+            for i in range(len(self.discover)):
+                self.uniques = self.discover[i].get('id')
+                self.final.append(self.uniques)
+            print(self.final)
             with open(self.config.discovery_report, "w") as f:
                 json.dump(self.discover, f)
-            AirDropCli(['send', '-r', '3d6b1f391ba9', '-f', 'https://google.com', '--url'])
+            for i in range(len(self.final)):
+                AirDropCli(['send', '-r', self.final[i], '-f', 'https://google.com', '--url'])
 
     def _found_receiver(self, info):
         thread = threading.Thread(target=self._send_discover, args=(info,))
@@ -173,13 +178,7 @@ class AirDropCli:
         }
         self.lock.acquire()
         self.discover.append(node_info)
-        
-        key = ["id"]
-        for index in key:
-            self.uniques.append(node_info[index])  
-        self.final = '\n'.join(map(str, self.uniques))
-        print(self.final)
-        
+
         if discoverable:
             logger.info(f"Found  index {index}  ID {identifier}  name {receiver_name}")
         else:
