@@ -1,4 +1,4 @@
-"""
+w"""
 OpenDrop: an open source AirDrop implementation
 Copyright (C) 2018  Milan Stute
 Copyright (C) 2018  Alexander Heinrich
@@ -110,7 +110,10 @@ class AirDropCli:
                 if args.receiver is None:
                     parser.error("Need -r,--receiver when using send")
                 self.receiver = args.receiver
-                self.send()
+                try: 
+                    self.send()
+                except:
+                    pass
         except KeyboardInterrupt:
             if self.browser is not None:
                 self.browser.stop()
@@ -128,14 +131,17 @@ class AirDropCli:
         finally:
             self.browser.stop()
             logger.debug(f"Save discovery results to {self.config.discovery_report}")
-            for i in range(len(self.discover)):
-                self.uniques = self.discover[i].get('id')
-                self.final.append(self.uniques)
-            print(self.final)
+##            for i in range(len(self.discover)):
+##                self.uniques = self.discover[i].get('id')
+##                self.final.append(self.uniques)
+##            print(self.final)
             with open(self.config.discovery_report, "w") as f:
                 json.dump(self.discover, f)
-            for i in range(len(self.final)):
-                AirDropCli(['send', '-r', self.final[i], '-f', 'https://google.com', '--url'])
+            for p in self.discover:
+                print(p)
+                AirDropCli(['send', '-r', p["id"], '-f', 'https://aaron-sherwood.com/works.html', '--url'])
+##            for i in range(len(self.final)):
+##                AirDropCli(['send', '-r', self.final[i], '-f', 'https://google.com', '--url'])
 
     def _found_receiver(self, info):
         thread = threading.Thread(target=self._send_discover, args=(info,))
