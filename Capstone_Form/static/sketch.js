@@ -127,7 +127,7 @@ let boxes = [];
 let thoughts = [];
 
 function preload() {
-  fontFile = loadFont('static/assets/HelveticaNeueBold.ttf');
+  fontFile = loadFont('/static/assets/Hangul.ttf');
   table = loadTable("static/assets/experience.csv", "csv");
 }
 
@@ -139,9 +139,9 @@ function setup() {
   world = createWorld();
 
   // Add a bunch of fixed boundaries
-  boundaries.push(new Boundary(1.5*windowWidth/5, 370, windowWidth/20, windowHeight));
-  boundaries.push(new Boundary(3.5*windowWidth/5, 370, windowWidth/20, windowHeight));
-  boundaries.push(new Boundary(720, 2*windowHeight/5, windowWidth, 30));
+  boundaries.push(new Boundary(1.6*windowWidth/5, 370, 30, windowHeight));
+  boundaries.push(new Boundary(3.4*windowWidth/5, 370, 30, windowHeight));
+  boundaries.push(new Boundary(700, 2.6*windowHeight/5, windowWidth, 30));
 
   // let b = new Box(width / 2, 30);
   // boxes.push(b);
@@ -150,7 +150,7 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(0);
   thoughts = table.getArray();
 
   // We must always step through time!
@@ -164,7 +164,7 @@ function draw() {
 
   while (i < thoughts.length-1) {
     i++;
-    let b = new Box(thoughts[i], random(2*windowWidth/5,3*windowWidth/5), 0);
+    let b = new Box(thoughts[i], random(2*windowWidth/5,3*windowWidth/5), 0, random(100,255),random(100,255),random(100,255));
     boxes.push(b);
   }
 
@@ -180,7 +180,7 @@ function draw() {
     boxes[i].display();
   }
 
-  for (let i = boxes.length; i > 10; i--) {
+  for (let i = boxes.length; i > 5; i--) {
     boxes[0].killBody();
     boxes.splice(0, 1);
   }
