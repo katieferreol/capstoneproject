@@ -1,18 +1,54 @@
 class Box {
-    constructor(input, x, y,r,g,b) {
+    constructor(input,x,y,r,g,b,lang) {
       this.input = input;
       this.r = r;
       this.g = g;
       this.b = b;
+      this.lang = lang;
+      this.font = font;
       this.w = 200;
-      this.h = textWidth(this.input)*9.96/200 * 9;
-      if (textWidth(this.input) < 100) {
-        this.w = textWidth(this.input)*2.5;
-        this.h = textAscent() + textDescent()*10;
+      console.log(textWidth(this.input));
+      
+      if (this.lang == "Latin" || this.lang == "Greek" || this.lang == "Cyrillic") {
+        this.h = textWidth(this.input)*9.96/200 * 9;
+        this.font = laGreCyFont;
       }
-      print(textWidth(this.input)*9.96/200);
+      if (this.lang == "Arabic") {
+        this.h = textWidth(this.input)*8.4/200 * 23.4;
+        this.font = arabicFont;
+      }
+      if (this.lang == "Hangul") {
+        this.h = textWidth(this.input)*8.962/200 * 17.376;
+        this.font = hangulFont;
+      }
+      if (this.lang == "Hiragana/Katakana") {
+        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.font = hiraKataFont;
+      }
+      if (this.lang == "SimplifiedHan") {
+        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.font = sHanFont;
+      }
+      if (this.lang == "TraditionalHan") {
+        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.font = tHanFont;
+      }
+      if (this.lang == "Devangari") {
+        this.h = textWidth(this.input)*12/200 * 12;
+        this.font = devangariFont;
+      }
+      if (this.lang == "Bengali") {
+        this.h = textWidth(this.input)*9.7/200 * 16;
+        this.font = bengaliFont;
+      }
+
+      // if (textWidth(this.input) < 100) {
+      //   this.w = textWidth(this.input)*2.5;
+      //   this.h = textAscent() + textDescent()*10;
+      // }
   
       // Define a body
+
       let bd = new box2d.b2BodyDef();
       bd.type = box2d.b2BodyType.b2_dynamicBody;
       bd.position = scaleToWorld(x, y);
@@ -61,9 +97,9 @@ class Box {
       let n;
 
       if (textWidth(this.input) < 100) {
-        n = 10;
+        n = -2;
       } else {
-        n = -2*textWidth(this.input)*9.96/200
+        n = -2*textWidth(this.input)*10/200;
       }
 
       rectMode(CENTER);
@@ -74,9 +110,14 @@ class Box {
       noStroke();
       rect(0, 0, this.w, this.h);
       fill(this.r,this.g,this.b);
-      textWrap(WORD);
+      if (this.input.includes(' ') == false) {
+        textWrap(CHAR);
+      } else {
+        textWrap(WORD);
+      }
+      textFont(this.font);
       textSize(25);
-      textLeading(25);
+      textLeading(30);
       textAlign(CENTER);
       text(this.input,0,n,200);
       //rect(0, 0, this.w, this.h);
