@@ -6,31 +6,30 @@ class Box {
       this.b = b;
       this.lang = lang;
       this.font = font;
-      this.w = 200;
-      console.log(textWidth(this.input));
+      this.w = 220;
       
       if (this.lang == "Latin" || this.lang == "Greek" || this.lang == "Cyrillic") {
-        this.h = textWidth(this.input)*9.96/200 * 9;
+        this.h = textWidth(this.input)*10/200 * 9;
         this.font = laGreCyFont;
       }
       if (this.lang == "Arabic") {
-        this.h = textWidth(this.input)*8.4/200 * 23.4;
+        this.h = textWidth(this.input)*8.5/200 * 23.5;
         this.font = arabicFont;
       }
       if (this.lang == "Hangul") {
-        this.h = textWidth(this.input)*8.962/200 * 17.376;
+        this.h = textWidth(this.input)*9/200 * 17.5;
         this.font = hangulFont;
       }
       if (this.lang == "Hiragana/Katakana") {
-        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.h = textWidth(this.input)*8/200 * 17.5;
         this.font = hiraKataFont;
       }
       if (this.lang == "SimplifiedHan") {
-        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.h = textWidth(this.input)*8/200 * 17.5;
         this.font = sHanFont;
       }
       if (this.lang == "TraditionalHan") {
-        this.h = textWidth(this.input)*8/200 * 17.376;
+        this.h = textWidth(this.input)*8/200 * 17.5;
         this.font = tHanFont;
       }
       if (this.lang == "Devangari") {
@@ -38,9 +37,10 @@ class Box {
         this.font = devangariFont;
       }
       if (this.lang == "Bengali") {
-        this.h = textWidth(this.input)*9.7/200 * 16;
+        this.h = textWidth(this.input)*10/200 * 16;
         this.font = bengaliFont;
       }
+      console.log(this.h);
 
       // if (textWidth(this.input) < 100) {
       //   this.w = textWidth(this.input)*2.5;
@@ -99,16 +99,18 @@ class Box {
       if (textWidth(this.input) < 100) {
         n = -2;
       } else {
-        n = -2*textWidth(this.input)*10/200;
+        n = -2*textWidth(this.input)*6/200;
       }
 
       rectMode(CENTER);
       push();
       translate(pos.x, pos.y);
       rotate(a);
-      fill(50);
+      fill(this.r/2,this.g/2,this.b/2);
+      // noFill();
       noStroke();
-      rect(0, 0, this.w, this.h);
+      rect(0, 0, this.w, this.h, 120);
+      triangle(20,this.h/2.2,50,this.h/2.2,50,this.h*.7);
       fill(this.r,this.g,this.b);
       if (this.input.includes(' ') == false) {
         textWrap(CHAR);
@@ -119,8 +121,8 @@ class Box {
       textSize(25);
       textLeading(30);
       textAlign(CENTER);
+      // stroke(0);
       text(this.input,0,n,200);
-      //rect(0, 0, this.w, this.h);
       pop();
     }
   }
