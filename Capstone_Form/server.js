@@ -1,47 +1,11 @@
-
-// var express = require('express');
-
-// var app = express();
-// var server = app.listen(3000);
-
-// app.use(express.static('public'));
-
-// console.log("my socket server is running"); 
-
-// var socket = require('socket.io');
-
-// var io = socket(server);
-
-// io.sockets.on('connection', newConnection);
-
-// function newConnection(socket) {
-//     console.log('new connection: ' + socket.id);
-// }
-
-// const express=require("express")
-
-// // Importing all the routes
-// const homeroute=require("./routes/Home.js")
-// const displayroute=require("./routes/display")
-
-// // Creating express server
-// const app=express()
-
-// // Handling routes request
-// app.use("/home",homeroute)
-// app.use("/display", displayroute)
-// app.listen((3000),()=>{
-// 	console.log("Server is Running")
-// })
-
 const express = require('express');
 const app = express();
 const path = require('path');
 const router = express.Router();
+const bodyParser = require('body-parser');
 const { Parser } = require('json2csv');
-const fields = ['share'];
+const fields = ['share', 'language'];
 const fs = require('fs');
-
 app.use(express.urlencoded({ extended: true }))
 
 router.get('/',function(req,res){
@@ -50,21 +14,23 @@ router.get('/',function(req,res){
 });
 
 router.post('/', function (req, res, next) {
-    //console.log(JSON.stringify(req.body.share));
-    const json2csvParser = new Parser({ fields, header: false });
-    let csv = json2csvParser.parse(req.body);
-    console.log(csv);
-    fs.appendFile('experience.csv',csv+',', function(err) {
+    let csv = req.body.share;
+    let language = req.body.language;
+    console.log(csv, language);
+    fs.appendFile('./static/assets/experience.csv',csv+','+language+'\r\n', function(err) {
         if (err) throw err;
     console.log('Saved!');
-    res.redirect('/display');
+    res.redirect('/thankyou');
     });
 });
 
 router.get('/display',function(req,res){
     res.sendFile(path.join(__dirname+'/views/display.html'));
-    //__dirname : It will resolve to your project folder.
-  });  
+});  
+
+router.get('/thankyou',function(req,res){
+  res.sendFile(path.join(__dirname+'/views/thankyou.html'));
+}); 
 
 //add the router
 app.use('/', router);
