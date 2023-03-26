@@ -2,24 +2,43 @@
 <html lang="en">
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <meta charset="utf-8" />
 
   </head>
   <body>
+    <script>
+      AOS.init();
+    </script>
     <form method="POST" action="/">
-      <label for="share">Share your experience.</label><br>
-      <input type="text" id="share" name="share" value="Don't be shy!"><br>
-      <input type="submit" value="Submit">
+      <label class="title" for="share" data-aos="fade-up" data-aos-duration="1500" style="font-family:'hnBold'; font-size:15vw" data-aos-delay="300">What did your catcaller say?</label>
+      <br><br><br>
+      <h6 class="first" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1500">All entries will be anonymous.</h6>
+      <h6 class="second" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="2000">This is a safe space to share.</h6>
+      <div data-aos="fade-up" data-aos-duration="1500" data-aos-delay="2500">
+      <input type="text" id="share" maxlength="50" class="share" name="share" value="We're in this together." onfocus="this.value=''" required>
+      <br><br><br>
+        <label for="language" style="font-family:'hnLight'; font-size:5vw">Please select the language that you typed in.</label>
+        <br><br>
+        <select name="language" id="language" style="font-family:'hnLight'; font-size:5vw">
+          <option value="Latin">Latin</option>
+          <option value="Arabic">Arabic</option>
+          <option value="SimplifiedHan">Simplified Han</option>
+          <option value="TraditionalHan">Traditional Han</option>
+          <option value="Devangari">Devangari</option>
+          <option value="Bengali">Bengali</option>
+          <option value="Hangul">Hangul</option>
+          <option value="Hiragana/Katakana">Hiragana/Katakana</option>
+          <option value="Cyrillic">Cyrillic</option>
+          <option value="Greek">Greek</option>
+        </select>
+      <br><br><br>
+        <input type="submit" value="Submit" class="button">
+      </div>
     </form>
     <main>
     </main>
-    <!-- <script>
-      var timeout = 3000;
-      setTimeout(function () {
-         window.location = '/display';
-      }, timeout);
-    </script> -->
   </body>
 </html>
