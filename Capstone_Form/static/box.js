@@ -13,39 +13,33 @@ class Box {
         this.font = laGreCyFont;
       }
       if (this.lang == "Arabic") {
-        this.h = textWidth(this.input)*8.5/200 * 23.5;
+        this.h = textWidth(this.input)*7/200 * 23.5;
         this.font = arabicFont;
       }
       if (this.lang == "Hangul") {
-        this.h = textWidth(this.input)*9/200 * 17.5;
+        this.h = textWidth(this.input)*6/200 * 17.5;
         this.font = hangulFont;
       }
       if (this.lang == "Hiragana/Katakana") {
-        this.h = textWidth(this.input)*8/200 * 17.5;
+        this.h = textWidth(this.input)*6/200 * 17.5;
         this.font = hiraKataFont;
       }
       if (this.lang == "SimplifiedHan") {
-        this.h = textWidth(this.input)*8/200 * 17.5;
+        this.h = textWidth(this.input)*6/200 * 17.5;
         this.font = sHanFont;
       }
       if (this.lang == "TraditionalHan") {
-        this.h = textWidth(this.input)*8/200 * 17.5;
+        this.h = textWidth(this.input)*6/200 * 17.5;
         this.font = tHanFont;
       }
       if (this.lang == "Devangari") {
-        this.h = textWidth(this.input)*12/200 * 12;
+        this.h = textWidth(this.input)*10/200 * 12;
         this.font = devangariFont;
       }
       if (this.lang == "Bengali") {
-        this.h = textWidth(this.input)*10/200 * 16;
+        this.h = textWidth(this.input)*8/200 * 16;
         this.font = bengaliFont;
       }
-      console.log(this.h);
-
-      // if (textWidth(this.input) < 100) {
-      //   this.w = textWidth(this.input)*2.5;
-      //   this.h = textAscent() + textDescent()*10;
-      // }
   
       // Define a body
 
@@ -62,7 +56,7 @@ class Box {
       // Some physics
       fd.density = 0.5;
       fd.friction = 10.9;
-      fd.restitution = 0.0;
+      fd.restitution = 0;
   
       // Create the body
       this.body = world.CreateBody(bd);
@@ -96,30 +90,39 @@ class Box {
       let a = this.body.GetAngleRadians();
       let n;
 
+      print(textWidth(this.input));
       if (textWidth(this.input) < 100) {
-        n = -2;
+        n = 0;
+        this.w = textWidth(this.input)*2;
       } else {
         n = -2*textWidth(this.input)*6/200;
       }
-
       rectMode(CENTER);
       push();
       translate(pos.x, pos.y);
       rotate(a);
-      fill(this.r/2,this.g/2,this.b/2);
+      fill(this.r/1.5,this.g/1.5,this.b/1.5);
       // noFill();
       noStroke();
-      rect(0, 0, this.w, this.h, 120);
-      triangle(20,this.h/2.2,50,this.h/2.2,50,this.h*.7);
-      fill(this.r,this.g,this.b);
+      if (textWidth(this.input) <= 80) {
+        rect(0, -5, this.w*1.3, 35, 120);
+        triangle(20,this.h/3.2,-10,this.h/3.2,20,25);
+      } else {
+        rect(0, 0, this.w*1.1, this.h, 120);
+        triangle(20,this.h/2.2,50,this.h/2.2,50,this.h*.7);
+      }
+      fill(255);
       if (this.input.includes(' ') == false) {
         textWrap(CHAR);
       } else {
         textWrap(WORD);
       }
       textFont(this.font);
-      textSize(25);
-      textLeading(30);
+      textSize(23);
+      if (this.lang == "Arabic") {
+        textSize(17);
+      }
+      textLeading(25);
       textAlign(CENTER);
       // stroke(0);
       text(this.input,0,n,200);
